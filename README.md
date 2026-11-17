@@ -12,7 +12,7 @@
   <img alt="CIFP La Laboral · DAM2" src="https://img.shields.io/badge/CIFP%20La%20Laboral-DAM2-orange.svg">
 </p>
 
-> *A classroom project to upgrade computer skills from IA nowadays materials.*
+> *Un proyecto de clase para mejorar las competencias informáticas con materiales actuales de IA.*
 
 **Upgrade IA** es un proyecto y espacio de trabajo de clase donde elaboramos,
 entre todos, materiales sobre **asistencia de IA en el desarrollo de software**:
