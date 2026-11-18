@@ -6,8 +6,7 @@
 
 <p align="center">
   <a href="LICENSE.md"><img alt="Licencia MIT" src="https://img.shields.io/badge/licencia-MIT-green.svg"></a>
-  <img alt="Último commit" src="https://img.shields.io/github/last-commit/profeFPInfor/upgrade-ia?label=%C3%BAltimo%20commit">
-  <img alt="Pull requests abiertos" src="https://img.shields.io/github/issues-pr/profeFPInfor/upgrade-ia?label=PR%20abiertos">
+  <img alt="Pull requests abiertos" src="https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fapi.github.com%2Fsearch%2Fissues%3Fq%3Drepo%3AprofeFPInfor%2Fupgrade-ia%2Btype%3Apr%2Bstate%3Aopen&query=%24.total_count&label=PR%20abiertos">
   <img alt="Hecho con Markdown" src="https://img.shields.io/badge/hecho%20con-Markdown-blue.svg?logo=markdown">
   <img alt="CIFP La Laboral · DAM2" src="https://img.shields.io/badge/CIFP%20La%20Laboral-DAM2-orange.svg">
 </p>
