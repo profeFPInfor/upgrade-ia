@@ -22,6 +22,7 @@ Las palabras que usamos en este proyecto, explicadas de forma sencilla. Están a
 | **Fusionar (merge)** | Unir los cambios de una rama con otra. |
 | **Git** | Programa que guarda la historia de los cambios de un proyecto. Funciona en tu ordenador. |
 | **GitHub** | Web que aloja repositorios de Git y ayuda a colaborar (Issues, pull requests). |
+| **HEAD** | La rama (o commit) en la que estás ahora mismo. En un conflicto, `HEAD` es **tu** versión. |
 | **Issue** | Tarea o propuesta de trabajo, con su conversación. En este repo las propone el profesor. |
 | **`main`** | Rama principal del repositorio: la versión buena. Está protegida y no se edita directamente. |
 | **Origin** | Nombre con el que Git recuerda el repositorio de GitHub del que clonaste. |
@@ -31,8 +32,11 @@ Las palabras que usamos en este proyecto, explicadas de forma sencilla. Están a
 | **Rama (branch)** | Línea de trabajo paralela. Trabajas en ella sin tocar `main`. |
 | **Rama protegida** | Rama con reglas que impiden subir cambios directamente: todo entra por pull request. |
 | **Remoto** | La copia del repositorio que está en GitHub (en contraste con la local, en tu ordenador). |
+| **Reflog** | Registro local de los sitios donde ha estado tu `HEAD`. Sirve para recuperar commits que parecen perdidos. |
 | **Repositorio** | La carpeta de un proyecto con toda su historia de cambios. |
+| **Revert** | Crear un commit nuevo que deshace otro ya publicado, sin reescribir la historia. |
 | **Revisión (review)** | Lectura de un pull request por otra persona, que comenta, pide cambios o aprueba. |
+| **Stash** | Apartar temporalmente cambios sin terminar para dejar la carpeta limpia y recuperarlos después. |
 | **Staging (preparado)** | Zona intermedia donde dejas los cambios que irán en el próximo commit (`git add`). |
 | **Terminal** | Ventana donde se escriben comandos. En Windows, *Git Bash*. |
 | **Token (de acceso)** | Clave que identifica tu cuenta ante GitHub cuando subes cambios. **No se comparte ni se sube nunca.** No es lo mismo que el token de un modelo de IA (ver más abajo). |
