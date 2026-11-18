@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="docs/img/logo-upgrade-ia.png" alt="Logo de Upgrade IA" width="220">
+  <img src="assets/img/logo-upgrade-ia.png" alt="Logo de Upgrade IA" width="220">
 </p>
 
 <h1 align="center">Upgrade IA</h1>
@@ -11,100 +11,79 @@
   <img alt="CIFP La Laboral · DAM2" src="https://img.shields.io/badge/CIFP%20La%20Laboral-DAM2-orange.svg">
 </p>
 
-> *Un proyecto de clase para mejorar las competencias informáticas con materiales actuales de IA.*
+> *Desarrollo de software multiplataforma asistido con IA.*
 
-**Upgrade IA** es un proyecto y espacio de trabajo de clase donde elaboramos,
-entre todos, materiales sobre **asistencia de IA en el desarrollo de software**:
-qué herramientas existen, cómo se usan y cómo se integran en un flujo de trabajo
-real.
+## Qué es
 
-Cada tema del temario se investiga, se prueba y se documenta en Markdown. El
-resultado es una base de materiales que sirve de referencia para la clase.
+**Upgrade IA** es una colección de información, recursos y herramientas para
+alumnos de **2º de DAM** (Desarrollo de Aplicaciones Multiplataforma) que quieren
+aprender y mejorar como desarrolladores de software con asistencia de IA.
 
-## Temario
+Lo elaboramos entre todos en el taller de la optativa Digitalización Avanzada
+del CIFP La Laboral. Cada aportación se documenta en Markdown y queda como
+material de consulta para la clase.
 
-1. **IDEs**
-   - Antigravity
-2. **LLMs gratuitos**
-   - OpenCode
-   - OpenRouter
-3. **Agentes**
-4. **Skills**
-5. **Flujos de trabajo**
-6. **Autoaprendizaje**
-   - Reflection
-   - Harness
-7. **Documentación**
-   - Markdown
-8. **Plugins de Claude Code para OpenCode**
+## Cómo está planteado
 
-## Qué hay en el repositorio
+La guía principal es el **proceso de desarrollo de software multiplataforma**,
+de la primera idea al mantenimiento. Cada fase tiene su carpeta con la misma
+estructura: qué se hace, qué se entrega y cómo ayuda la IA.
 
-| Ruta                                       | Contenido                                             |
-|--------------------------------------------|-------------------------------------------------------|
-| [`markdown/`](markdown/)                   | Curso de Markdown en 63 capítulos numerados (tema 7). |
-| [`.github/CODEOWNERS`](.github/CODEOWNERS) | Define quién revisa y aprueba los cambios.            |
-| [`docs/img/`](docs/img/)                   | Imágenes del repositorio (logo).                      |
-| [`LICENSE.md`](LICENSE.md)                 | Licencia MIT.                                         |
+```mermaid
+flowchart LR
+    A[01 Análisis] --> B[02 Requisitos] --> C[03 Diseño] --> D[04 Enfoque y arquitectura] --> E[05 Entorno y Git]
+    E --> F[06 Implementación] --> G[07 Pruebas] --> H[08 Despliegue] --> I[09 Mantenimiento]
+    I -->|nuevas necesidades| A
+```
 
-## Cómo trabajar en el proyecto
+Las herramientas de IA se documentan una sola vez y las fases las enlazan cuando
+las usan.
 
-La rama `main` está **protegida**: no se puede subir nada directamente a ella.
-Todo cambio entra mediante una **rama de trabajo** y un **pull request (PR)**, y
-solo el profesor puede aprobarlo y fusionarlo.
+```mermaid
+flowchart TB
+    R[upgrade-ia] --> P["proceso/<br>guía por fases"]
+    R --> H["herramientas-ia/<br>caja de herramientas"]
+    R --> M["markdown/<br>curso de consulta"]
+    R --> D["docs/<br>cómo documentar"]
+    H -. se usan en .-> P
+```
 
-1. **Clona el repositorio** (solo la primera vez):
+## Contenido
 
-   ```bash
-   git clone https://github.com/profeFPInfor/upgrade-ia.git
-   cd upgrade-ia
-   ```
+| Ruta                                       | Qué hay                                                  |
+|--------------------------------------------|----------------------------------------------------------|
+| [`proceso/`](proceso/)                     | Las 9 fases del desarrollo multiplataforma.              |
+| [`herramientas-ia/`](herramientas-ia/)     | Herramientas de IA, empezando por OpenCode.              |
+| [`markdown/`](markdown/)                   | Curso de Markdown en 63 capítulos numerados.             |
+| [`docs/`](docs/)                           | Estándar de trabajo para documentar y aportar.           |
+| [`assets/img/`](assets/img/)               | Imágenes del repositorio.                                |
+| [`.github/CODEOWNERS`](.github/CODEOWNERS) | Quién revisa y aprueba los cambios.                      |
+| [`LICENSE.md`](LICENSE.md)                 | Licencia MIT.                                            |
 
-2. **Actualiza `main`** antes de empezar:
+## Estructura de `proceso/` y `herramientas-ia/`
 
-   ```bash
-   git checkout main
-   git pull
-   ```
+```text
+proceso/
+├── 01-analisis/                       Análisis y estado del arte (SOTA)
+├── 02-requisitos/
+├── 03-diseno/
+├── 04-enfoque-y-arquitectura/
+├── 05-entorno-y-control-de-versiones/
+├── 06-implementacion/
+├── 07-pruebas/
+├── 08-despliegue/
+└── 09-mantenimiento-y-documentacion/
 
-3. **Crea tu rama** con un nombre que describa el tema, por ejemplo
-   `opencode` o `docs/agentes`:
+herramientas-ia/
+└── opencode/                          Agente de programación con el que se trabaja
+```
 
-   ```bash
-   git checkout -b nombre-de-tu-rama
-   ```
+Cada fase de `proceso/` tiene su `README.md` con la misma estructura. Las
+herramientas de `herramientas-ia/` se documentan una sola vez y las fases las enlazan.
 
-4. **Escribe tu material** en un fichero Markdown (`.md`) y guarda los cambios:
+## Cómo participar
 
-   ```bash
-   git add .
-   git commit -m "docs: añadir material sobre <tema>"
-   ```
-
-5. **Sube tu rama** a GitHub:
-
-   ```bash
-   git push -u origin nombre-de-tu-rama
-   ```
-
-6. **Abre un pull request** hacia `main` desde la pestaña *Pull requests* de
-   GitHub (*New pull request*). Explica en la descripción qué aportas.
-
-7. **Espera la revisión.** El profesor puede pedirte cambios; súbelos a la misma
-   rama y el PR se actualiza solo. Cuando lo apruebe, se fusionará en `main`.
-
-## Normas del proyecto
-
-- **Nada de secretos:** no subas claves de API, tokens, contraseñas ni ficheros
-  `.env`. Si una clave se sube por error, considérala comprometida y revócala.
-- **Nada de datos personales** de ninguna persona en los materiales.
-- **Una rama por tema** y un PR por tema, pequeños y fáciles de revisar.
-- **Formato Markdown:** usa títulos, listas y bloques de código. Los diagramas,
-  en [Mermaid](https://mermaid.js.org/), no en imágenes.
-- **Mensajes de commit** con el formato [Conventional Commits](https://www.conventionalcommits.org/es/)
-  (`docs:`, `feat:`, `fix:`, `chore:`…).
-- **Cita las fuentes** de lo que investigues y comprueba que lo que escribes
-  funciona antes de documentarlo.
+Antes de aportar, lee la guía de trabajo: [docs/README.md](docs/README.md).
 
 ## Licencia
 
