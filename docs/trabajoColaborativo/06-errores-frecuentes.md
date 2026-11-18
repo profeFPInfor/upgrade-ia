@@ -26,9 +26,33 @@ Texto típico: `remote: error: GH006: Protected branch update failed`.
 
 Significa que no hay nada preparado ni modificado. Causas típicas: no guardaste el fichero en VS Code, editaste otra carpeta, o ya hiciste el commit. Ejecuta `git status` y mira la carpeta que tienes abierta.
 
+## Git dice `Author identity unknown`
+
+Texto típico, al hacer `git commit`:
+
+```text
+Author identity unknown
+
+*** Please tell me who you are.
+```
+
+Git no sabe quién eres, porque no has configurado tu nombre y tu correo. Se arregla una sola vez, con tus datos y tu correo `noreply` (paso [2.4](02-preparar-el-equipo.md#24-decirle-a-git-quién-eres)):
+
+```bash
+git config --global user.name "Tu Nombre"
+git config --global user.email "tu-correo-noreply"
+```
+
+Después repite el `git commit`.
+
 ## `git pull` se queja de mis cambios locales
 
-Si tienes cambios sin guardar en un fichero que también cambió en GitHub, Git se niega a sobrescribirlos y te lo dice (un mensaje que habla de *local changes would be overwritten*). **No pasa nada**: haz commit de tus cambios (`git add` y `git commit`) y vuelve a hacer `git pull`. Si no quieres conservar esos cambios, pregunta antes de descartarlos.
+Si tienes cambios sin guardar en un fichero que también cambió en GitHub, Git se niega a sobrescribirlos y te lo dice (un mensaje que habla de *local changes would be overwritten*). **No pasa nada.** Mira primero en qué rama estás con `git status`:
+
+- **En tu rama de trabajo:** haz commit de tus cambios (`git add` y `git commit`) y vuelve a hacer `git pull`.
+- **En `main`:** **no hagas commit en `main`**. No deberías estar editando ahí; pregunta al profesor antes de tocar nada, para no perder tus cambios.
+
+Si no quieres conservar esos cambios, pregunta antes de descartarlos.
 
 ## Hice commits estando en `main` por error
 
@@ -128,7 +152,7 @@ git push
 
 `--no-edit` acepta el mensaje que Git ya ha preparado para la unión (*Merge branch 'main' into …*), así no se abre ningún editor.
 
-**Si te pierdes a medias,** antes de terminar la unión puedes volver al estado anterior con `git merge --abort`. No pierdes tu trabajo ya guardado en commits.
+**Si te pierdes a medias,** antes de terminar la unión puedes volver al estado anterior con `git merge --abort`. No pierdes tu trabajo ya guardado en commits. Si lo ejecutas cuando no hay ninguna unión en curso, Git responde `fatal: There is no merge to abort (MERGE_HEAD missing).`: no hay nada que abortar.
 
 Si no sabes qué versión conservar, **pregunta**: no elijas al azar.
 

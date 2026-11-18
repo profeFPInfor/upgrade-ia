@@ -54,6 +54,87 @@ Aquí usamos `merge` porque es más difícil estropear algo y porque nunca se de
 
 Los commits ya subidos son la **referencia común**: otros los tienen en su ordenador y construyen sobre ellos. Si los reescribes (con `push --force`, `reset` o `rebase`), la historia de cada uno deja de coincidir con la tuya y se rompe el trabajo ajeno. Además, aquí el historial es la prueba de tu aportación. Reescribir solo es razonable en tu **rama privada, antes de subirla** (por ejemplo, `git commit --amend`).
 
+## Cuando algo ya está subido o se pierde
+
+Estas herramientas sirven cuando el error ya no se arregla con un simple `--amend` o `git restore`. Cada comando se ha probado con Git 2.53 en un repositorio de prueba.
+
+### `revert` frente a `reset`
+
+Para deshacer un commit **que ya está subido y otros pueden haber descargado**, no se reescribe la historia: se añade un commit nuevo que lo contrarresta.
+
+| | `git revert` | `git reset --hard` |
+|---|---|---|
+| Qué hace | Crea un commit nuevo que **deshace** el cambio de otro | **Mueve** la rama atrás y descarta commits |
+| Historia | La conserva (queda el commit original y su reverso) | La reescribe |
+| Seguro para commits ya subidos | **Sí** | **No** (exigiría `push --force`) |
+
+```bash
+git revert --no-edit HEAD
+```
+
+Responde algo como `[main c7fba53] Revert "docs: añadir línea mala"`. El commit malo sigue en el historial, y el contenido vuelve a ser el anterior. `--no-edit` acepta el mensaje que Git prepara.
+
+### `reflog`: la red de seguridad
+
+Git recuerda dónde ha estado tu `HEAD` (la punta de lo que tienes abierto). Si crees que has perdido un commit tras un `reset --hard`, mira el registro:
+
+```bash
+git reflog -4
+```
+
+Verás líneas como `90fc04c HEAD@{1}: commit: docs: trabajo valioso`. Para volver a ese punto:
+
+```bash
+git reset --hard HEAD@{1}
+```
+
+Responde `HEAD is now at 90fc04c docs: trabajo valioso`. El `reflog` es **local** (solo de tu ordenador) y se limpia con el tiempo, así que úsalo pronto.
+
+### `stash`: guardar cambios a medias
+
+Si tienes cambios sin terminar y necesitas cambiar de rama o hacer `pull`, puedes apartarlos:
+
+```bash
+git stash          # guarda tus cambios y deja la carpeta limpia
+git stash list     # ver lo guardado
+git stash pop      # recuperarlo y quitarlo de la lista
+```
+
+Por defecto `stash` guarda solo los ficheros que Git ya conocía; los ficheros nuevos sin rastrear requieren `git stash -u`.
+
+### `--force-with-lease`: reescribir tu rama con red
+
+Si reescribes un commit ya subido de **tu propia rama** (por ejemplo, con `git commit --amend`), un `git push` normal se rechaza con `(non-fast-forward)`. La opción de siempre, `--force`, pisa lo que haya en GitHub. Una más segura es:
+
+```bash
+git push --force-with-lease
+```
+
+Solo sobrescribe si la rama de GitHub está **tal como tú la conoces**. Si otra persona ha subido algo mientras tanto, Git lo rechaza con `(stale info)` y no pierdes su trabajo. Reglas:
+
+- Solo en **tu rama propia**, nunca en `main`.
+- Si ya tienes un pull request abierto, **avisa en el PR**: reescribir la rama puede descolocar los comentarios de la revisión.
+- Ante la duda, no lo uses: haz un commit nuevo, que es siempre seguro.
+
+### `git pull` con ramas divergentes
+
+Si tu rama y la de GitHub han avanzado cada una por su lado, `git pull` se detiene con:
+
+```text
+hint: You have divergent branches and need to specify how to reconcile them.
+fatal: Need to specify how to reconcile divergent branches.
+```
+
+Git te pide que elijas cómo integrarlas. La opción que usamos en este tutorial es **fusionar**:
+
+```bash
+git pull --no-rebase
+```
+
+Si hay conflicto, se resuelve como en la [práctica guiada](08-practica-guiada.md). Para no tener que repetirlo, puedes fijarlo para ese repositorio con `git config pull.rebase false`.
+
+Documentación: [git revert](https://git-scm.com/docs/git-revert), [git reflog](https://git-scm.com/docs/git-reflog), [git stash](https://git-scm.com/docs/git-stash), [git push](https://git-scm.com/docs/git-push) y [git pull](https://git-scm.com/docs/git-pull).
+
 ## Fork o rama
 
 - **Rama (lo que hacemos aquí):** trabajas en una rama del propio repositorio porque eres **colaborador** y tienes permiso de escritura.
@@ -71,7 +152,7 @@ GitHub ofrece varias formas de fusionar, y el profesor elige una:
 | **Squash** | Junta todos tus commits en **uno solo** en `main`. |
 | **Rebase** | Coloca tus commits uno a uno sobre `main`, sin commit de unión. |
 
-Importa para el historial: con *squash*, `main` muestra un único commit de tu trabajo (aunque tus commits siguen visibles dentro del pull request). Por eso `git branch -d` puede negarse a borrar tu rama tras fusionarse ([ver la revisión](05-la-revision.md#cuando-se-fusiona)).
+En este repositorio solo está activado el *squash* (comprobado en los ajustes el 2026-11-18). Importa para el historial: con *squash*, `main` muestra un único commit de tu trabajo (aunque tus commits siguen visibles dentro del pull request). Por eso Git no siempre reconoce tu rama como fusionada y `git branch -d` puede avisar o negarse a borrarla ([ver la revisión](05-la-revision.md#cuando-se-fusiona)).
 
 ## Buenas prácticas profesionales
 

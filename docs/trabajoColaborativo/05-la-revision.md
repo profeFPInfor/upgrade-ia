@@ -45,7 +45,16 @@ git pull
 git branch -d docs/12-analisis-sota
 ```
 
-`-d` (minúscula) borra la rama **solo si está totalmente fusionada**; es la opción segura. Si Git se niega con un mensaje como `error: the branch '…' is not fully merged`, es porque el PR se fusionó de una forma que Git no reconoce como "fusionada" (por ejemplo, si el profesor aplasta tus commits en uno solo). En ese caso, y **solo cuando tu PR ya esté fusionado**, usa `-D` (mayúscula), que borra la rama sin comprobar nada.
+`-d` (minúscula) borra la rama **solo si Git la considera fusionada**; es la opción segura. En este repositorio **todos los pull requests se fusionan con *squash***, es decir, aplastando tus commits en uno solo, y además GitHub **borra automáticamente la rama de GitHub al fusionar** ([documentación](https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/configuring-pull-request-merges/managing-the-automatic-deletion-of-branches)). Por eso, al borrar tu rama local, Git puede comportarse de dos maneras, y las dos son normales:
+
+| Lo que ves | Qué significa | Qué hacer |
+|---|---|---|
+| `warning: deleting branch '…' that has been merged to 'refs/remotes/origin/…', but not yet merged to HEAD` y después `Deleted branch …` | Git ha borrado la rama. El aviso solo dice que tu copia local de la rama de GitHub (`origin/…`) todavía existe, porque no se ha actualizado. | Nada: la rama está borrada. |
+| `error: the branch '…' is not fully merged` | Git no puede comprobar que esté fusionada. Pasa tras `git pull --prune` o `git fetch --prune`, que eliminan la referencia a la rama de GitHub ya borrada. | Si **tu PR ya está fusionado**, usa `-D` (mayúscula). |
+
+**Un matiz:** el aviso de la primera fila solo aparece si tu rama tiene *upstream*, es decir, si la subiste con `git push -u origin …` (como en el [paso 7](04-una-aportacion-completa.md#7-subir-la-rama)). Sin *upstream*, `-d` da el error `not fully merged` aunque `origin/…` exista.
+
+`-D` borra la rama **sin comprobar nada**, así que úsalo solo cuando tengas la seguridad de que tu PR está fusionado. (`git pull --prune` actualiza y además quita las referencias a ramas que ya no existen en GitHub.)
 
 Documentación: [git branch](https://git-scm.com/docs/git-branch).
 
