@@ -1,0 +1,39 @@
+name: PR privacidad
+
+# Bloquea los pull requests que suben datos personales o secretos.
+# - Evento pull_request (NUNCA pull_request_target): el código del PR corre sin secretos y con permisos de solo lectura.
+# - Los registros de Actions de un repositorio público son públicos: el script no imprime nunca el valor detectado.
+# - El nombre del job (pr-privacidad) es el que hay que marcar como comprobación obligatoria en el repositorio.
+on:
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pr-privacidad-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  pr-privacidad:
+    name: pr-privacidad
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      # actions/checkout v7.0.1, verificado el 2026-11-18: el tag apunta al commit completo indicado.
+      - name: Descargar el repositorio con todo su historial
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Comprobar datos personales y secretos
+        env:
+          # Se pasan por variables de entorno y se citan en la orden: nunca se interpolan dentro del script.
+          BASE_REF: ${{ github.base_ref }}
+          PR_AUTOR: ${{ github.event.pull_request.user.login }}
+        run: |
+          python3 .github/scripts/detectar_datos_personales.py \
+            --base "origin/${BASE_REF}" \
+            --autor "${PR_AUTOR}" \
+            --code-owner profeFPInfor
