@@ -44,6 +44,7 @@ resultado es una base de materiales que sirve de referencia para la clase.
 | Ruta                                       | Contenido                                             |
 |--------------------------------------------|-------------------------------------------------------|
 | [`markdown/`](markdown/)                   | Curso de Markdown en 63 capítulos numerados (tema 7). |
+| [`plugins-claudecode-opencode/`](plugins-claudecode-opencode/) | Plugins de Claude Code y su volcado a OpenCode (tema 8). |
 | [`.github/CODEOWNERS`](.github/CODEOWNERS) | Define quién revisa y aprueba los cambios.            |
 | [`docs/img/`](docs/img/)                   | Imágenes del repositorio (logo).                      |
 | [`LICENSE.md`](LICENSE.md)                 | Licencia MIT.                                         |
