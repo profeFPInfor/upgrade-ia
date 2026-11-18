@@ -211,6 +211,18 @@ class TestPrograma(unittest.TestCase):
             self.assertEqual(len(lineas), 2)
             self.assertTrue(all(l.startswith("::error file=a%2C b.md,line=") for l in lineas))
 
+    def test_aviso_de_limite_de_anotaciones_en_calidad(self):
+        enlaces = "\n".join(f"[x](no-existe-{n}.md)" for n in range(12))
+        with repo({"a.md": "# A\n" + enlaces + "\n"}) as t:
+            _, out, _ = self.ejecutar("--raiz", t.name, "--formato", "github", "markdown", "--ficheros", "a.md")
+            lineas = out.splitlines()
+            self.assertTrue(lineas[0].startswith("::notice title=Markdown::"), lineas[0])
+            self.assertIn("12 error(es)", lineas[0])
+            self.assertEqual(sum(1 for l in lineas if l.startswith("::error")), 12)
+        with repo({"a.md": "# A\n[x](no-existe.md)\n"}) as t:
+            _, out, _ = self.ejecutar("--raiz", t.name, "--formato", "github", "markdown", "--ficheros", "a.md")
+            self.assertNotIn("::notice", out)
+
     def test_resumen_en_markdown_sin_barras_que_rompan_la_tabla(self):
         with repo({"a.md": "# A\n[x](a|b.md)\n"}) as t:
             resumen = Path(t.name) / "resumen.md"

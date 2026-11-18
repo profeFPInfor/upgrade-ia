@@ -320,6 +320,10 @@ def comprobar_enlaces(raiz: str, rutas: list[str], estado=estado_url) -> list[Pr
 # Salida
 # ----------------------------------------------------------------------------------------------
 def emitir(problemas: list[Problema], titulo: str, formato: str):
+    if formato == "github":
+        nota = base.nota_limite_anotaciones(sum(1 for p in problemas if p.error), sum(1 for p in problemas if not p.error))
+        if nota:  # va la primera: así es una de las anotaciones que sí se ven
+            print(f"::notice title={base.escapar_propiedad(titulo)}::{base.escapar_dato(nota)}")
     for p in problemas:
         nivel = "error" if p.error else "warning"
         if formato == "github":

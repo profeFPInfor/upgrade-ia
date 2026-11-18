@@ -1029,7 +1029,23 @@ def etiqueta(tipo: str, h: Hallazgo | None = None) -> str:
     return base
 
 
+# GitHub solo muestra 10 anotaciones de cada nivel (error, warning, notice) por paso; el resto solo está en el registro
+# y en el resumen del job. Se observó en un PR de prueba: 15 hallazgos, 10 anotaciones visibles.
+MAX_ANOTACIONES_GITHUB = 10
+
+
+def nota_limite_anotaciones(n_errores: int, n_avisos: int) -> str | None:
+    """Texto del aviso que se emite PRIMERO cuando habrá más anotaciones de las que GitHub muestra (si no, None)."""
+    if n_errores <= MAX_ANOTACIONES_GITHUB and n_avisos <= MAX_ANOTACIONES_GITHUB:
+        return None
+    return (f"Hay {n_errores} error(es) y {n_avisos} aviso(s), pero GitHub solo muestra las {MAX_ANOTACIONES_GITHUB} "
+            "primeras anotaciones de cada tipo. Para ver todos, abre el resumen del job (Summary) o el registro del paso.")
+
+
 def emitir_anotaciones(hallazgos: list[Hallazgo], avisos: list[Aviso]):
+    nota = nota_limite_anotaciones(len(hallazgos), len(avisos))
+    if nota:  # va la primera: así es una de las anotaciones que sí se ven
+        print(f"::notice title={escapar_propiedad('Privacidad')}::{escapar_dato(nota)}")
     for h in hallazgos:
         print(f"::error file={escapar_propiedad(a_utf8(h.fichero))},line={h.linea},"
               f"title={escapar_propiedad('Privacidad')}::{escapar_dato(etiqueta(h.tipo, h))} (valor no mostrado)")
@@ -1049,7 +1065,11 @@ def emitir_texto(hallazgos: list[Hallazgo], avisos: list[Aviso]):
 def resumen_markdown(hallazgos: list[Hallazgo], avisos: list[Aviso], n_ficheros: int, truncados: list[str]) -> str:
     out = ["## Comprobación de privacidad", ""]
     if hallazgos:
-        out += [f"**Resultado: {len(hallazgos)} posible(s) dato(s) personal(es) o secreto(s).** El pull request queda bloqueado.", "",
+        out += [f"**Resultado: {len(hallazgos)} posible(s) dato(s) personal(es) o secreto(s).** El pull request queda bloqueado.", ""]
+        if len(hallazgos) > MAX_ANOTACIONES_GITHUB:
+            out += [f"> GitHub solo muestra las {MAX_ANOTACIONES_GITHUB} primeras anotaciones en el pull request. "
+                    "**Esta tabla las lista todas.**", ""]
+        out += [
                 "| Fichero | Línea | Qué se ha detectado | Dónde |", "|---|---|---|---|"]
         for h in hallazgos[:MAX_FILAS_RESUMEN]:
             out.append(f"| `{sanear(h.fichero)}` | {h.linea} | {etiqueta(h.tipo, h)} | {h.lugar or '-'} |")

@@ -50,7 +50,7 @@ flowchart LR
 
 ### Si salta la comprobación
 
-1. Mira el fichero, la línea y el tipo que indica el CI (pestaña *Checks* del pull request, o el resumen del job).
+1. Mira el fichero, la línea y el tipo que indica el CI (pestaña *Checks* del pull request, o el resumen del job). **GitHub solo muestra las 10 primeras anotaciones de cada tipo:** si hay más, el CI te lo avisa en la primera, y la lista completa está en el resumen del job (*Summary*) y en el registro del paso.
 2. Quita el dato o sustitúyelo por **datos inventados**, y sube el cambio a la misma rama.
 3. **Si el dato ya estaba en un commit anterior de tu rama, borrarlo en un commit nuevo no basta:** sigue en el historial, y el repositorio es público. Avisa al profesor antes de seguir: hay que reescribir el historial.
 4. Si crees que es un **falso positivo** (por ejemplo, datos de ejemplo inventados), pide una excepción al profesor. No edites tú la lista de excepciones: el CI falla si un PR de otra persona la toca.
