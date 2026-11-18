@@ -121,7 +121,7 @@ Los comandos se escriben en una **terminal**, una ventana donde das órdenes esc
 
 - En VS Code usa la **terminal integrada**: menú *Terminal → New Terminal* (*Terminal → Nueva terminal*). Funciona igual en Windows, macOS y Linux.
 - El atajo `` Ctrl+` `` no funciona con todos los teclados (en el español, la tecla del acento grave obliga a pulsar también la barra espaciadora). Si no te sale, usa el menú.
-- En Windows, la terminal integrada puede ser PowerShell o Git Bash. **Los comandos de este tutorial valen en las dos.** No tienes que cambiar nada.
+- En Windows, la terminal integrada puede ser PowerShell o Git Bash. **Los comandos de este tutorial valen en las dos.** Una precaución: las expresiones con llaves, como `"HEAD@{1}"`, se escriben **entre comillas** para que PowerShell no las interprete (en Git Bash también funcionan con comillas).
 - Los mensajes de Git pueden salir en español o en inglés según tu equipo; el sentido es el mismo.
 
 ## Cómo se ha verificado este tutorial

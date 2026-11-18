@@ -85,10 +85,12 @@ git reflog -4
 Verás líneas como `90fc04c HEAD@{1}: commit: docs: trabajo valioso`. Para volver a ese punto:
 
 ```bash
-git reset --hard HEAD@{1}
+git reset --hard "HEAD@{1}"
 ```
 
-Responde `HEAD is now at 90fc04c docs: trabajo valioso`. El `reflog` es **local** (solo de tu ordenador) y se limpia con el tiempo, así que úsalo pronto.
+Responde `HEAD is now at 90fc04c docs: trabajo valioso`. Las comillas no son necesarias en Git Bash, pero **sí se recomiendan en PowerShell**, donde las llaves `{ }` tienen un significado propio. En ambos casos funcionan, así que úsalas siempre.
+
+El `reflog` es **local** (solo de tu ordenador) y **caduca**: por defecto Git conserva sus entradas **90 días**, y **30 días** las de commits que ya no forman parte de ninguna rama (por ejemplo, los anteriores a un `--amend`). Úsalo pronto. ([Valores por defecto: `gc.reflogExpire` y `gc.reflogExpireUnreachable`](https://git-scm.com/docs/git-gc).)
 
 ### `stash`: guardar cambios a medias
 
@@ -104,13 +106,23 @@ Por defecto `stash` guarda solo los ficheros que Git ya conocía; los ficheros n
 
 ### `--force-with-lease`: reescribir tu rama con red
 
-Si reescribes un commit ya subido de **tu propia rama** (por ejemplo, con `git commit --amend`), un `git push` normal se rechaza con `(non-fast-forward)`. La opción de siempre, `--force`, pisa lo que haya en GitHub. Una más segura es:
+Si reescribes un commit ya subido de **tu propia rama** (por ejemplo, con `git commit --amend`), un `git push` normal se rechaza con `(non-fast-forward)` (*sin avance directo*: tu rama ya no es una continuación directa de la de GitHub, porque has reescrito commits que ya estaban allí). La opción de siempre, `--force`, pisa lo que haya en GitHub. Una más segura es:
 
 ```bash
 git push --force-with-lease
 ```
 
-Solo sobrescribe si la rama de GitHub está **tal como tú la conoces**. Si otra persona ha subido algo mientras tanto, Git lo rechaza con `(stale info)` y no pierdes su trabajo. Reglas:
+Solo sobrescribe si la rama de GitHub está **tal como tú la conoces**. Si otra persona ha subido algo mientras tanto, Git lo rechaza con `(stale info)` y no pierdes su trabajo.
+
+**Un matiz importante:** `--force-with-lease` compara con tu copia local de la rama de GitHub (`origin/…`). Si **después de que otra persona subiera algo haces un `git fetch`** (o lo hace sin que lo notes un programa en segundo plano, como el auto-fetch de VS Code), esa copia se actualiza, la comprobación pasa y **tu push sobrescribe los commits de la otra persona sin que los hayas visto**. Lo he comprobado: en ese caso el comando responde `(forced update)` y el commit ajeno desaparece de la rama.
+
+La opción `--force-if-includes` añade la comprobación que falta: solo permite el push si has **integrado** en tu rama lo que había en GitHub.
+
+```bash
+git push --force-with-lease --force-if-includes
+```
+
+Con ella, en el mismo caso Git rechaza el push. ([Documentación de `git push`: `--force-with-lease` y `--force-if-includes`](https://git-scm.com/docs/git-push).) Reglas:
 
 - Solo en **tu rama propia**, nunca en `main`.
 - Si ya tienes un pull request abierto, **avisa en el PR**: reescribir la rama puede descolocar los comentarios de la revisión.
