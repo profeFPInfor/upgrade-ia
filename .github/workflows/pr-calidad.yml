@@ -1,0 +1,56 @@
+name: PR calidad
+
+# Comprueba la calidad de un pull request: pruebas de los scripts del CI, Markdown (enlaces, anclas, diagramas),
+# estructura de ficheros y título del PR (Conventional Commits).
+# - Evento pull_request (NUNCA pull_request_target), permisos de solo lectura y sin secretos.
+# - Sin filtros de rutas: GitHub deja "pendientes" las comprobaciones obligatorias que se saltan por un filtro, y eso
+#   bloquearía los PR que no tocan esas rutas. Siempre se ejecuta entera (dura segundos).
+# - Los textos del PR (título, descripción, rama) los controla quien abre el PR: llegan por variables de entorno y
+#   nunca se interpolan dentro de la orden.
+# - El nombre del job (pr-calidad) es el que hay que marcar como comprobación obligatoria en el repositorio.
+on:
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pr-calidad-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  pr-calidad:
+    name: pr-calidad
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      # actions/checkout v7.0.1, verificado el 2026-11-18: el tag apunta al commit completo indicado.
+      - name: Descargar el repositorio con todo su historial
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      # Los pasos siguientes se ejecutan siempre (salvo cancelación) para que un PR vea todos sus problemas a la vez.
+      - name: Pruebas de los scripts del CI y de los hooks
+        run: python3 -B -m unittest discover -s .github/scripts/tests
+
+      - name: Markdown (enlaces, anclas, bloques, diagramas)
+        if: ${{ !cancelled() }}
+        env:
+          BASE_REF: ${{ github.base_ref }}
+        run: python3 -B .github/scripts/comprobar_calidad.py markdown --base "origin/${BASE_REF}"
+
+      - name: Estructura de ficheros
+        if: ${{ !cancelled() }}
+        env:
+          BASE_REF: ${{ github.base_ref }}
+        run: python3 -B .github/scripts/comprobar_calidad.py estructura --base "origin/${BASE_REF}"
+
+      - name: Título, descripción y rama del PR
+        if: ${{ !cancelled() }}
+        env:
+          PR_TITULO: ${{ github.event.pull_request.title }}
+          PR_CUERPO: ${{ github.event.pull_request.body }}
+          PR_RAMA: ${{ github.head_ref }}
+        run: python3 -B .github/scripts/comprobar_calidad.py titulo

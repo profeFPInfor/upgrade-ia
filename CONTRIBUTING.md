@@ -21,6 +21,63 @@ Los pasos completos, con comandos, están en [Cómo trabajamos](docs/trabajoCola
 - **Commits con [Conventional Commits](https://www.conventionalcommits.org/es/):** `docs: añadir ejemplo de matriz comparativa`.
 - **Nunca subas secretos** (claves, contraseñas, tokens) ni datos personales.
 
+## Comprobaciones automáticas
+
+Cada pull request pasa por dos comprobaciones automáticas (CI) antes de que el profesor lo revise:
+
+```mermaid
+flowchart LR
+    A[Abres el pull request] --> B{pr-privacidad<br>pr-calidad}
+    B -->|hay errores| C[Corriges y subes<br>a la misma rama]
+    C --> B
+    B -->|todo en orden| D[Revisión del profesor]
+```
+
+| Comprobación | Qué mira | ¿Bloquea? |
+|---|---|---|
+| `pr-privacidad` | Datos personales y secretos en lo que cambia tu PR | Sí |
+| `pr-calidad` | Pruebas de los scripts, Markdown (enlaces, anclas, diagramas), estructura de ficheros y título del PR | Los errores sí; los avisos no |
+
+### Qué detecta la comprobación de privacidad
+
+- Correos electrónicos, DNI/NIE (con la letra de control válida), teléfonos españoles, IBAN, tarjetas de pago, números de la Seguridad Social y fechas de nacimiento que aparezcan junto a la palabra *nacimiento*.
+- **Cabeceras de tablas** que anuncian datos personales (`nombre`, `apellidos`, `dni`, `email`, `telefono`, `direccion`, `fecha_nacimiento`, `iban` y sus equivalentes en inglés).
+- Hojas de cálculo (`.xlsx`, `.xlsm`, `.ods`): el texto de las celdas y de los comentarios, y si traen macros. Cuadernos `.ipynb`: el código **y las salidas**, donde se cuelan los datos.
+- Secretos: contraseñas, claves y tokens escritos en el código, claves privadas y ficheros `.env`, `.pem` o `.key`.
+- Un fichero de más de 5 MB falla: reduce su tamaño.
+
+**El valor detectado nunca se muestra.** Los registros de un repositorio público son públicos, así que el CI solo dice el fichero, la línea y el tipo de dato.
+
+### Si salta la comprobación
+
+1. Mira el fichero, la línea y el tipo que indica el CI (pestaña *Checks* del pull request, o el resumen del job).
+2. Quita el dato o sustitúyelo por **datos inventados**, y sube el cambio a la misma rama.
+3. **Si el dato ya estaba en un commit anterior de tu rama, borrarlo en un commit nuevo no basta:** sigue en el historial, y el repositorio es público. Avisa al profesor antes de seguir: hay que reescribir el historial.
+4. Si crees que es un **falso positivo** (por ejemplo, datos de ejemplo inventados), pide una excepción al profesor. No edites tú la lista de excepciones: el CI falla si un PR de otra persona la toca.
+
+### Límites de estas comprobaciones
+
+- Detectan **patrones**. **No detectan nombres propios ni datos identificativos en texto libre.**
+- **Un pull request limpio no garantiza que no haya datos personales.** Estas comprobaciones no sustituyen la revisión del profesor ni tu responsabilidad: antes de subir datos, pregúntate si son de personas reales.
+- Los formatos que no se pueden analizar (`.xls`, `.pdf`, `.docx`, `.parquet`, imágenes…) solo generan un aviso, y los comprimidos, `.pkl` y bases de datos se rechazan. Una contraseña escrita como frase con espacios no se detecta.
+- Los cambios en `.github/` y `.githooks/` (el CI y los hooks) solo los hace el profesor; un pull request de otra persona que los toque falla.
+
+### Comprobar en tu ordenador antes de subir (opcional, recomendado)
+
+Los *hooks* de Git del repositorio hacen las mismas comprobaciones **antes** de crear el commit y de subir la rama, así te enteras antes de que salte el CI. Se instalan una vez por clon, con Python 3.11 o superior:
+
+```bash
+python3 .githooks/hooks.py instalar
+```
+
+Hacen tres cosas:
+
+- **Al commitear:** impiden commitear en `main`, revisan lo que vas a commitear (datos personales, secretos, formatos no admitidos, marcas de conflicto sin resolver, enlaces rotos en Markdown).
+- **Al escribir el mensaje:** comprueban que sigue Conventional Commits.
+- **Al subir:** impiden subir a `main` y revisan los commits que salen.
+
+Los hooks **ayudan, no son la barrera**: `git commit --no-verify` y `git push --no-verify` los saltan. La barrera es el CI del pull request, que repite todo. Si no tienes Python, los hooks avisan y no bloquean nada. Para quitarlos: `git config --unset core.hooksPath`.
+
 ## Etiquetas
 
 Las etiquetas clasifican Issues y pull requests. **Las pone el profesor**: si crees que una está mal, dilo en un comentario.

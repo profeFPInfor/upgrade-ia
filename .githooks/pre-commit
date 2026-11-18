@@ -1,0 +1,12 @@
+#!/bin/sh
+# Hook de Git: pre-commit. Lo activa: python3 .githooks/hooks.py instalar   (ver .githooks/hooks.py)
+# No depende de nada fuera de la biblioteca estándar de Python. Si no hay Python 3.11 o superior, avisa y deja
+# pasar: la barrera real es el CI del pull request.
+case "$0" in */*) dir=${0%/*};; *) dir=.;; esac
+for py in python3 python "py -3"; do
+  if $py -c 'import sys; sys.exit(sys.version_info < (3, 11))' >/dev/null 2>&1; then
+    exec $py "$dir/hooks.py" pre-commit "$@"
+  fi
+done
+echo "AVISO: no se encontró Python 3.11 o superior; se omite la comprobación local (el CI la repetirá)." >&2
+exit 0

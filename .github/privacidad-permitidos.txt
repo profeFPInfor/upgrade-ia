@@ -1,0 +1,37 @@
+# Excepciones del comprobador de privacidad (workflow pr-privacidad).
+#
+# SOLO las añade el profesor (code owner), en un pull request propio y tras revisar el dato.
+# Un pull request de otra persona que modifique este fichero falla en el CI.
+# Las excepciones valen para los PR posteriores: la lista que se aplica es la que está en la rama del PR,
+# así que primero se fusiona la excepción y después el alumno actualiza su rama.
+#
+# Formato, una excepción por línea, con 4 campos separados por "|":
+#
+#   tipo | fichero | valor | motivo
+#
+#   tipo     correo, dni, telefono, iban, tarjeta, nss, nacimiento, cabecera, dominio, secreto,
+#            fichero-secreto, macros
+#   fichero  patrón de ruta desde la raíz del repo (admite *), p. ej. analitica/sinteticos/*
+#   valor    "*" (cualquier valor de ese tipo en esos ficheros), o bien:
+#              - correo, dni, telefono, iban, tarjeta, nss, nacimiento: "sha256:<64 hex>", la huella de UN valor
+#              - cabecera: la categoría en claro (p. ej. nombre y apellidos, correo electrónico, teléfono)
+#              - dominio: el dominio en claro (p. ej. el de un centro); el patrón de fichero debe ser "*"
+#              - secreto, fichero-secreto, macros: solo "*" (no se guardan huellas de secretos)
+#   motivo   por qué es seguro publicarlo (obligatorio)
+#
+# NUNCA se pueden permitir claves privadas, ficheros demasiado grandes ni cambios de rutas protegidas.
+# NO añadas excepciones para datos de personas reales: el repositorio es público.
+#
+# Para obtener la huella de un valor sin dejarlo en el historial de la terminal:
+#   printf '%s' 'valor' | python3 .github/scripts/detectar_datos_personales.py --huella correo
+# (La huella de un valor corto, como un teléfono, se puede deducir probando combinaciones: por eso solo se
+#  usan huellas para valores que ya son públicos, y si dudas usa un comodín limitado a un fichero de datos
+#  inventados.)
+#
+# Ejemplos (déjalos comentados):
+#   correo | analitica/sinteticos/* | * | correos inventados generados para la práctica
+#   cabecera | analitica/productos.csv | nombre y apellidos | la columna "nombre" es el nombre de un producto
+#   dominio | * | dominio-ficticio.es | dominio inventado que usa la documentación
+
+# --- Excepciones activas ---
+dominio | * | ejemplo.com | dominio inventado que usa el tutorial de trabajo colaborativo en su ejemplo de correo
