@@ -21,6 +21,10 @@ Los pasos completos, con comandos, están en [Cómo trabajamos](docs/trabajoCola
 - **Commits con [Conventional Commits](https://www.conventionalcommits.org/es/):** `docs: añadir ejemplo de matriz comparativa`.
 - **Nunca subas secretos** (claves, contraseñas, tokens) ni datos personales.
 
+## Zona de analítica
+
+Además de documentación, se aportan **hojas de cálculo, dashboards y scripts de Python** que analizan y automatizan este repositorio. Viven en [`analitica/`](analitica/README.md), que explica qué se puede aportar y las reglas: datos abiertos o agregados, sin secretos y con el uso de IA declarado. Cada pull request pasa por unas [comprobaciones automáticas](#comprobaciones-automáticas) que bloquean los datos personales y los secretos que reconocen, pero **no detectan nombres propios ni datos en texto libre**: antes de subir datos, pregúntate si son de personas reales. El proceso es el mismo: una Issue, una rama, un pull request.
+
 ## Comprobaciones automáticas
 
 Cada pull request pasa por dos comprobaciones automáticas (CI) antes de que el profesor lo revise:
