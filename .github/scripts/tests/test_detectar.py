@@ -501,6 +501,25 @@ class TestPuntoAPunto(unittest.TestCase):
         self.assertRegex(out, r"::error file=analitica/clientes con espacios\.csv,line=\d+,title=Privacidad::")
         self.assertIn("valor no mostrado", out)
 
+    def test_aviso_cuando_hay_mas_anotaciones_de_las_que_github_muestra(self):
+        muchos = {f"analitica/p{n}.txt": f"{CORREO.replace('usuario', 'u' + str(n))}\n" for n in range(d.MAX_ANOTACIONES_GITHUB + 3)}
+        codigo, out, _, resumen = self.ejecutar(self.montar(muchos))
+        self.assertEqual(codigo, 1)
+        lineas = out.splitlines()
+        self.assertTrue(lineas[0].startswith("::notice title=Privacidad::"), lineas[0])  # el aviso va el primero
+        self.assertIn("13 error(es)", lineas[0])
+        self.assertIn(f"solo muestra las {d.MAX_ANOTACIONES_GITHUB} primeras", lineas[0])
+        self.assertEqual(sum(1 for l in lineas if l.startswith("::error")), 13)  # se emiten todas; GitHub corta
+        self.assertIn("Esta tabla las lista todas", resumen)
+        for valor in TODOS_LOS_VALORES:
+            self.assertNotIn(valor, out + resumen)
+
+    def test_sin_aviso_si_caben_en_las_anotaciones(self):
+        pocos = {f"analitica/p{n}.txt": f"{CORREO.replace('usuario', 'u' + str(n))}\n" for n in range(d.MAX_ANOTACIONES_GITHUB)}
+        _, out, _, resumen = self.ejecutar(self.montar(pocos))
+        self.assertNotIn("::notice", out)
+        self.assertNotIn("Esta tabla las lista todas", resumen)
+
     def test_solo_se_analizan_los_ficheros_del_pr(self):
         raiz = self.montar({"nuevo.md": "limpio\n"}, base_extra={"viejo.md": f"{CORREO}\n"})
         codigo, out, err, _ = self.ejecutar(raiz)
