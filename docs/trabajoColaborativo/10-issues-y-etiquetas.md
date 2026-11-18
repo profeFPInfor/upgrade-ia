@@ -90,7 +90,7 @@ Esa búsqueda muestra las Issues abiertas, sin asignar y con la etiqueta `docs`.
 
 Una **etiqueta** es una marca de color con un nombre que clasifica una Issue o un pull request. Puede llevar varias. Hay tres grupos y **cada grupo tiene su propia gama de color**, para que los reconozcas de un vistazo. La referencia completa está en [CONTRIBUTING](../../CONTRIBUTING.md#etiquetas).
 
-**Tipo: qué es** (azules, violeta y gris)
+**Tipo: qué es** (cian, azul, violeta, gris y rosa)
 
 | Etiqueta | Para qué la usamos |
 |---|---|

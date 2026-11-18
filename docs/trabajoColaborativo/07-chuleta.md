@@ -47,7 +47,7 @@ Para consultar, no para aprender. Si una palabra no te suena, mira el [glosario]
 | Cancelar una unión con conflictos | `git merge --abort` |
 | Borrar una rama ya fusionada (opción segura) | `git branch -d nombre-de-la-rama` |
 
-> **Solo si Git se niega con `-d`** (*not fully merged*) **y tu PR ya está fusionado:** `git branch -D nombre-de-la-rama`. `-D` borra sin comprobar nada; no lo uses por costumbre.
+> **Solo si Git se niega con `-d`** (*not fully merged*) **y tu PR ya está fusionado:** `git branch -D nombre-de-la-rama`. `-D` borra sin comprobar nada; no lo uses por costumbre. Si solo ves un *warning* y después `Deleted branch`, la rama ya está borrada ([detalle](05-la-revision.md#cuando-se-fusiona)).
 
 ## VS Code
 

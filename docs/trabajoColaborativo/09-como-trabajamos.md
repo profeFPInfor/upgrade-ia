@@ -113,7 +113,7 @@ git pull
 git branch -d docs/12-analisis-sota
 ```
 
-Si Git se niega con `not fully merged`, y **solo si tu PR ya está fusionado**, usa `git branch -D docs/12-analisis-sota`.
+Si Git muestra un aviso pero dice `Deleted branch`, está bien. Si se niega con `not fully merged`, y **solo si tu PR ya está fusionado**, usa `git branch -D docs/12-analisis-sota` ([explicación](05-la-revision.md#cuando-se-fusiona)).
 
 Después, vuelve al paso 1 con otra Issue.
 

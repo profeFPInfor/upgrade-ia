@@ -180,6 +180,16 @@ La línea `new branch` confirma que la rama ya está en GitHub. A veces también
    Así la Issue se cierra sola cuando se fusione el PR. Funciona porque el PR apunta a `main`, la rama por defecto del repositorio; si apuntara a otra rama, la palabra se ignoraría.
 5. Pulsa **Create pull request**.
 
+Un buen pull request se reconoce a simple vista:
+
+| Mal | Bien |
+|---|---|
+| Título: `cambios` | Título: `docs: añadir matriz comparativa de frameworks` |
+| Descripción vacía | Descripción: qué aportas, dónde está y qué falta (si falta algo) |
+| Sin enlace a la Issue | Termina con `Closes #12` |
+| Mezcla tres temas distintos | Un tema, una Issue |
+| Ficheros que no tocaste en *Files changed* | Solo los ficheros de tu aportación |
+
 Si tu trabajo no está terminado pero quieres enseñarlo, puedes crear un **borrador** (*draft*): en lugar del botón verde, despliega y elige *Create Draft Pull Request*. Un borrador indica que aún no está listo para revisar.
 
 Ya está: tu aportación está pendiente de revisión.
