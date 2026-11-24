@@ -11,6 +11,7 @@ Guía para documentar en **Upgrade IA**: desarrollo de software multiplataforma 
 | [`markdown/`](../markdown/) | Curso de Markdown, de consulta. |
 | [`docs/trabajoColaborativo/`](trabajoColaborativo/) | Tutorial desde cero de Git y GitHub para trabajar en equipo. |
 | [`docs/glosario.md`](glosario.md) | Glosario de los términos que usamos. |
+| [`docs/temporalizacion.md`](temporalizacion.md) | Calendario de las unidades del módulo, curso 2026-27. |
 | [`assets/img/`](../assets/img/) | Imágenes del repositorio. |
 
 La regla de oro: **un tema vive en un solo sitio** y el resto lo enlaza. Si algo ya existe, enlázalo; no lo copies.
